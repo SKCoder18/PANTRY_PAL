@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { getInventory } from '../services/storage';
+import { getInventory } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
-    setItems(getInventory());
+    const fetchInventory = async () => {
+      const data = await getInventory();
+      setItems(data);
+    };
+    fetchInventory();
   }, []);
 
   return (
@@ -17,8 +23,19 @@ export default function Dashboard() {
           <button className="material-symbols-outlined text-[#2D6A4F] hover:bg-black/5 p-2 rounded-full transition-colors active:scale-95">menu</button>
           <h1 className="font-['Plus_Jakarta_Sans'] tracking-tight text-xl font-bold text-[#1a1c19] dark:text-stone-100">PantryPal</h1>
         </div>
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed shadow-sm">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6DnIA7mI-X6inuOGirJ5GjWKFJWADx9fbRw2igRJqik-s9CeChdLH4_4EPbN4_e9F_4cEVn_LHRp9Uq846IjVdav_YyCeq4NyKxHUEDbJBjU7P9FW1bnGfPQ824FytFjV-v1IlhZTOMgsGGkFKXTRhXxJW3fIlqDXtZ87V5prGkMKVle2Z9fBAWvsAHPpJlEal83D_vraAb2d06nFs3GcxTbqTCpfeAJiYTShsrKaTt3JjLhXqqsZAG_fR5ONDLGptyx8UL377bOn" alt="User" />
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-bold text-on-surface leading-tight">{user?.name || 'User'}</p>
+            <p className="text-xs text-on-surface-variant leading-tight">{user?.email}</p>
+          </div>
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed shadow-sm bg-primary-container flex items-center justify-center font-bold text-primary">
+            {user?.picture ? (
+              <img src={user.picture} alt="User" />
+            ) : (
+              user?.name?.charAt(0).toUpperCase() || 'U'
+            )}
+          </div>
+          <button onClick={logout} className="material-symbols-outlined text-outline hover:text-error transition-colors p-2 rounded-full hover:bg-error-container/50">logout</button>
         </div>
       </header>
 

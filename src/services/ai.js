@@ -1,6 +1,6 @@
 // Mock AI Service - Works 100% offline without any API keys!
 import { RECIPE_DB } from '../utils/recipeDB';
-import { getCustomRecipes } from './storage';
+import { getCustomRecipes } from './api';
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const suggestRecipesFromIngredients = async (itemsList) => {
@@ -49,7 +49,7 @@ export const getRecipeDetails = async (recipeName, itemsList) => {
   const userItems = itemsList.map(i => i.name.toLowerCase());
   
   // 1. Search for exact match in Built-in or Custom Recipes
-  const customRecipes = getCustomRecipes();
+  const customRecipes = await getCustomRecipes();
   const matchedRecipe = customRecipes.find(r => r.title === recipeName) || RECIPE_DB.find(r => r.title === recipeName);
 
   if (matchedRecipe) {
@@ -161,7 +161,7 @@ export const chatWithPantryAI = async (messages, userMsg, itemsList) => {
      
      if (searchTerms.length > 2) {
          // Search RECIPE_DB and Custom Recipes
-         const customRecipes = getCustomRecipes();
+         const customRecipes = await getCustomRecipes();
          const allRecipes = [...customRecipes, ...RECIPE_DB];
          
          const match = allRecipes.find(r => r.title.toLowerCase().includes(searchTerms) || searchTerms.includes(r.title.toLowerCase()));

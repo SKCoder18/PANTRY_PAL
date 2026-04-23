@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getInventory } from '../services/storage';
+import { getInventory } from '../services/api';
 import { chatWithPantryAI } from '../services/ai';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +29,7 @@ export default function AIChat() {
     setMessages(newMessages);
     setLoading(true);
 
-    const items = getInventory();
+    const items = await getInventory();
     
     // Call AI
     const reply = await chatWithPantryAI(newMessages, userMsg, items);

@@ -1,10 +1,13 @@
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink, Navigate, useLocation } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Dashboard from "./pages/Dashboard.jsx";
 import AddItem from "./pages/AddItem.jsx";
 import Recipes from "./pages/Recipes.jsx";
 import RecipeDetail from "./pages/RecipeDetail.jsx";
 import AIChat from "./pages/AIChat.jsx";
 import CreateRecipe from "./pages/CreateRecipe.jsx";
+import Login from "./pages/Login.jsx";
 
 const BottomNavBar = () => {
   const getNavClass = ({ isActive }) =>
@@ -13,6 +16,9 @@ const BottomNavBar = () => {
         ? "bg-[#006e2c] dark:bg-emerald-800 text-white rounded-full"
         : "text-[#404943] dark:text-stone-400 hover:text-[#2D6A4F]"
     }`;
+
+  const location = useLocation();
+  if (location.pathname === '/login') return null;
 
   return (
     <nav className="fixed bottom-0 left-0 w-full h-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur-lg flex justify-around items-center px-8 pb-2 z-50 rounded-t-[32px] shadow-[0_-12px_24px_rgba(0,0,0,0.06)]">
@@ -36,21 +42,40 @@ const BottomNavBar = () => {
   );
 };
 
+const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+function AppRoutes() {
+  return (
+    <div className="bg-surface text-on-surface font-body min-h-screen">
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/add" element={<ProtectedRoute><AddItem /></ProtectedRoute>} />
+        <Route path="/recipes" element={<ProtectedRoute><Recipes /></ProtectedRoute>} />
+        <Route path="/recipes/:id" element={<ProtectedRoute><RecipeDetail /></ProtectedRoute>} />
+        <Route path="/create-recipe" element={<ProtectedRoute><CreateRecipe /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
+      </Routes>
+      <BottomNavBar />
+    </div>
+  );
+}
+
 function App() {
   return (
-    <BrowserRouter>
-      <div className="bg-surface text-on-surface font-body min-h-screen">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/add" element={<AddItem />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
-          <Route path="/create-recipe" element={<CreateRecipe />} />
-          <Route path="/chat" element={<AIChat />} />
-        </Routes>
-        <BottomNavBar />
-      </div>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }
 

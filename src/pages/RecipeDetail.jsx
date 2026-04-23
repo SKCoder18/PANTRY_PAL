@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getInventory } from '../services/storage';
+import { getInventory } from '../services/api';
 import { getRecipeDetails } from '../services/ai';
 
 export default function RecipeDetail() {
@@ -12,7 +12,7 @@ export default function RecipeDetail() {
 
   useEffect(() => {
     async function fetchRecipe() {
-      const items = getInventory();
+      const items = await getInventory();
       const output = await getRecipeDetails(recipeName, items);
       setDetails(output);
       setLoading(false);

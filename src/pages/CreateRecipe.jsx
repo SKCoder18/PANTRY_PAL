@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { INGREDIENTS_DB } from '../utils/database';
-import { saveCustomRecipe } from '../services/storage';
+import { saveCustomRecipe } from '../services/api';
 
 export default function CreateRecipe() {
   const navigate = useNavigate();
@@ -56,14 +56,18 @@ export default function CreateRecipe() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title) return alert("Recipe needs a title!");
     if (formData.ingredients.length === 0) return alert("Add at least one ingredient!");
     if (formData.steps.length === 0) return alert("Add at least one step!");
     
-    saveCustomRecipe(formData);
-    navigate('/recipes');
+    try {
+      await saveCustomRecipe(formData);
+      navigate('/recipes');
+    } catch (error) {
+      alert('Failed to save recipe');
+    }
   };
 
   return (

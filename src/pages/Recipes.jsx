@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { getInventory, getCustomRecipes } from '../services/storage';
+import { getInventory, getCustomRecipes } from '../services/api';
 import { suggestRecipesFromIngredients } from '../services/ai';
 import { RECIPE_DB } from '../utils/recipeDB';
 
@@ -11,12 +11,16 @@ export default function Recipes() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    setCustomRecipes(getCustomRecipes());
+    const fetchRecipes = async () => {
+      const data = await getCustomRecipes();
+      setCustomRecipes(data);
+    };
+    fetchRecipes();
   }, []);
 
   const handleSuggest = async () => {
     setLoading(true);
-    const items = getInventory();
+    const items = await getInventory();
     if (items.length === 0) {
         alert("Add some items to your inventory first!");
         setLoading(false);

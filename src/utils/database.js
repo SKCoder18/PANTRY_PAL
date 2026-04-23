@@ -50,7 +50,7 @@ export const INGREDIENTS_DB = [
   { name: "Green chutney / Pickles (Achar)", image: getImage('pantry'), category: 'Pantry' },
   { name: "Sugar", image: getImage('pantry'), category: 'Pantry' },
   { name: "Jaggery (Gur)", image: getImage('pantry'), category: 'Pantry' },
-  { name: "Salt", image: "https://images.unsplash.com/photo-1621245052955-44cbaf1a5924?auto=format&w=400&q=80", category: 'Pantry' },
+  { name: "Salt", image: getImage('pantry'), category: 'Pantry' },
   { name: "Tea powder / Coffee", image: getImage('pantry'), category: 'Pantry' },
   { name: "Dry fruits (Almonds, Cashews)", image: getImage('pantry'), category: 'Pantry' },
 
@@ -58,8 +58,8 @@ export const INGREDIENTS_DB = [
   { name: "Milk", image: getImage('dairy'), category: 'Dairy' },
   { name: "Curd (Dahi)", image: getImage('dairy'), category: 'Dairy' },
   { name: "Paneer", image: getImage('dairy'), category: 'Dairy' },
-  { name: "Butter", image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&w=400&q=80", category: 'Dairy' },
-  { name: "Cheese (Mozzarella)", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&w=400&q=80", category: 'Dairy' },
+  { name: "Butter", image: getImage('dairy'), category: 'Dairy' },
+  { name: "Cheese (Mozzarella)", image: getImage('dairy'), category: 'Dairy' },
   { name: "Cream (Malai)", image: getImage('dairy'), category: 'Dairy' },
   { name: "Buttermilk (Chaas)", image: getImage('dairy'), category: 'Dairy' },
   { name: "Lassi (Sweet/Salted)", image: getImage('dairy'), category: 'Dairy' },
@@ -67,13 +67,13 @@ export const INGREDIENTS_DB = [
   { name: "Ghee", image: getImage('dairy'), category: 'Dairy' },
 
   // 🥦 3. Produce (Vegetables) -> Produce
-  { name: "Onion", image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&w=400&q=80", category: 'Produce' },
-  { name: "Potato", image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&w=400&q=80", category: 'Produce' },
-  { name: "Tomato", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&w=400&q=80", category: 'Produce' },
+  { name: "Onion", image: getImage('produce'), category: 'Produce' },
+  { name: "Potato", image: getImage('produce'), category: 'Produce' },
+  { name: "Tomato", image: getImage('produce'), category: 'Produce' },
   { name: "Green chilli", image: getImage('produce'), category: 'Produce' },
   { name: "Ginger", image: getImage('produce'), category: 'Produce' },
-  { name: "Garlic", image: "https://images.unsplash.com/photo-1540148426945-36d19e51c89f?auto=format&w=400&q=80", category: 'Produce' },
-  { name: "Carrot", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&w=400&q=80", category: 'Produce' },
+  { name: "Garlic", image: getImage('produce'), category: 'Produce' },
+  { name: "Carrot", image: getImage('produce'), category: 'Produce' },
   { name: "Beans", image: getImage('produce'), category: 'Produce' },
   { name: "Brinjal (Eggplant)", image: getImage('produce'), category: 'Produce' },
   { name: "Capsicum", image: getImage('produce'), category: 'Produce' },
@@ -96,7 +96,7 @@ export const INGREDIENTS_DB = [
   { name: "Mutton (Goat meat)", image: getImage('meat'), category: 'Meat' },
   { name: "Fish (Rohu, Katla)", image: getImage('meat'), category: 'Meat' },
   { name: "Prawns", image: getImage('meat'), category: 'Meat' },
-  { name: "Eggs", image: "https://images.unsplash.com/photo-1506976785307-8732e854ad02?auto=format&w=400&q=80", category: 'Meat' },
+  { name: "Eggs", image: getImage('meat'), category: 'Meat' },
 
   // 🌱 Vegetarian Protein -> Produce
   { name: "Tofu", image: getImage('dairy'), category: 'Produce' },

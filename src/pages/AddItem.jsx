@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addItem } from '../services/storage';
+import { addItem } from '../services/api';
 import { INGREDIENTS_DB } from '../utils/database';
+import { useAuth } from '../context/AuthContext';
+import { addEventToGoogleCalendar } from '../services/calendar';
 
 export default function AddItem() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const { accessToken } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -74,10 +78,23 @@ export default function AddItem() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name) return alert("Please enter an item name.");
-    addItem(formData);
+    
+    setIsSaving(true);
+    try {
+      await addItem(formData);
+      
+      if (formData.expiry && accessToken) {
+        await addEventToGoogleCalendar(formData.name, formData.expiry, accessToken);
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save item');
+    }
+    
+    setIsSaving(false);
     navigate('/');
   };
 
@@ -198,9 +215,9 @@ export default function AddItem() {
             </div>
           </div>
           
-          <button type="submit" className="md:col-span-2 mt-8 w-full bg-gradient-to-r from-primary to-[#204e39] text-white py-5 rounded-[1.5rem] font-bold text-lg flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all">
+          <button type="submit" disabled={isSaving} className="md:col-span-2 mt-8 w-full bg-gradient-to-r from-primary to-[#204e39] text-white py-5 rounded-[1.5rem] font-bold text-lg flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all disabled:opacity-70">
             <span className="material-symbols-outlined">add_circle</span>
-            Save to Pantry
+            {isSaving ? 'Saving...' : 'Save to Pantry'}
           </button>
         </form>
       </section>
