@@ -59,7 +59,7 @@ router.post('/google', (req, res) => {
   const { name, email, picture, google_id } = req.body;
 
   db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
-    if (err) return res.status(500).json({ error: 'Database error' });
+    if (err) return res.status(500).json({ error: 'Database error', message: err.message });
     
     if (user) {
       // Update picture if missing
@@ -73,7 +73,7 @@ router.post('/google', (req, res) => {
         'INSERT INTO users (name, email, google_id, picture) VALUES (?, ?, ?, ?)',
         [name, email, google_id, picture],
         function(err) {
-          if (err) return res.status(500).json({ error: 'Database error' });
+          if (err) return res.status(500).json({ error: 'Database error', message: err.message });
           const token = jwt.sign({ id: this.lastID, email, name }, JWT_SECRET);
           res.json({ token, user: { id: this.lastID, email, name, picture } });
         }
